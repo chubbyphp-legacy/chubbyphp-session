@@ -6,6 +6,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 interface SessionInterface
 {
+    const FLASH_KEY = 'f';
+
     /**
      * @param Request $request
      * @param string  $key

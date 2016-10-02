@@ -8,8 +8,6 @@ use PSR7Session\Session\SessionInterface as PSR7Session;
 
 final class Session implements SessionInterface
 {
-    const FLASH_KEY = 'f';
-
     /**
      * @param Request $request
      * @param string  $key
