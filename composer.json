@@ -1,0 +1,31 @@
+{
+    "name": "chubbyphp/chubbyphp-session",
+    "description": "Chubbyphp Session",
+    "keywords": ["chubbyphp", "slim", "session"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dominik Zogg",
+            "email": "dominik.zogg@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "~7.0",
+        "psr7-sessions/storageless": "~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.5",
+        "pimple/pimple": "~3.0"
+    },
+    "suggest": {
+        "pimple/pimple": "Is needed for the SessionProvider"
+    },
+    "autoload": {
+        "psr-4": { "Chubbyphp\\Session\\": "src/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
