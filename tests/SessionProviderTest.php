@@ -1,6 +1,6 @@
 <?php
 
-namespace Chubbyphp\Tests\Translation;
+namespace Chubbyphp\Tests\Session;
 
 use Chubbyphp\Session\Session;
 use Chubbyphp\Session\SessionProvider;
