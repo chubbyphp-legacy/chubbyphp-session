@@ -74,7 +74,6 @@ $app->register($container['session.middleware']);
 
 /** @var Session $session */
 $session = $container['session'];
-
 ```
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-session

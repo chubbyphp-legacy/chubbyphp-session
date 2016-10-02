@@ -17,6 +17,20 @@ final class SessionProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
+        $this->registerSettings($container);
+        $this->registerSetCookie($container);
+        $this->registerMiddleware($container);
+
+        $container['session'] = function () {
+            return new Session();
+        };
+    }
+
+    /**
+     * @param Container $container
+     */
+    private function registerSettings(Container $container)
+    {
         $container['session.expirationTime'] = 1200;
         $container['session.privateRsaKey'] = '';
         $container['session.publicRsaKey'] = '';
@@ -24,7 +38,27 @@ final class SessionProvider implements ServiceProviderInterface
         $container['session.setCookieHttpOnly'] = true;
         $container['session.setCookiePath'] = '/';
         $container['session.setCookieSecureOnly'] = true;
+    }
 
+    /**
+     * @param Container $container
+     */
+    private function registerSetCookie(Container $container)
+    {
+        $container['session.setCookie'] = function () use ($container) {
+            return SetCookie::create(SessionMiddleware::DEFAULT_COOKIE)
+                ->withHttpOnly($container['session.setCookieHttpOnly'])
+                ->withPath($container['session.setCookiePath'])
+                ->withSecure($container['session.setCookieSecureOnly'])
+                ;
+        };
+    }
+
+    /**
+     * @param Container $container
+     */
+    private function registerMiddleware(Container $container)
+    {
         $container['session.middleware'] = function () use ($container) {
             return new SessionMiddleware(
                 new Sha256(),
@@ -35,18 +69,6 @@ final class SessionProvider implements ServiceProviderInterface
                 $container['session.expirationTime'],
                 new SystemCurrentTime()
             );
-        };
-
-        $container['session.setCookie'] = function () use ($container) {
-            return SetCookie::create(SessionMiddleware::DEFAULT_COOKIE)
-                ->withHttpOnly($container['session.setCookieHttpOnly'])
-                ->withPath($container['session.setCookiePath'])
-                ->withSecure($container['session.setCookieSecureOnly'])
-            ;
-        };
-
-        $container['session'] = function () {
-            return new Session();
         };
     }
 }
