@@ -50,6 +50,17 @@ $session->addFlash($request, new FlashMessage(FlashMessage::TYPE_SUCCESS, 'succe
 $flashMessage = $session->getFlash($request); // removes the flash from session
 ```
 
+### SessionMiddleware
+
+```{.php}
+<?php
+
+$app = ...
+
+// sample for slim
+$app->add($container['session.middleware']);
+```
+
 ### SessionProvider (Pimple)
 
 ```{.php}
@@ -69,9 +80,6 @@ $container['session.publicRsaKey'] = '';
 $container['session.setCookieHttpOnly'] = true;
 $container['session.setCookiePath'] = '/';
 $container['session.setCookieSecureOnly'] = true;
-
-// sample for slim
-$app->register($container['session.middleware']);
 
 /** @var Session $session */
 $session = $container['session'];
