@@ -12,6 +12,7 @@ A simple session solution, based on the [PSR7Session][2] (client side session).
 ## Requirements
 
  * php: ~7.0
+ * psr7-sessions/storageless: ~2.0
 
 ## Installation
 
