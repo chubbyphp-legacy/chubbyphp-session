@@ -14,6 +14,10 @@ A simple session solution, based on the [PSR7Session][2] (client side session).
  * php: ~7.0
  * psr7-sessions/storageless: ~2.0
 
+## Suggest
+
+ * pimple/pimple: ~3.0
+
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-session][1].
