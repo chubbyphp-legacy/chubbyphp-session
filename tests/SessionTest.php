@@ -13,6 +13,30 @@ use PSR7Session\Session\SessionInterface as PSR7Session;
  */
 final class SessionTest extends \PHPUnit_Framework_TestCase
 {
+    public function testHasWithValue()
+    {
+        $request = $this->getRequest([
+            SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([
+                'some.existing.key' => json_encode(['key' => 'value']),
+            ]),
+        ]);
+
+        $session = new Session();
+
+        self::assertTrue($session->has($request, 'some.existing.key'));
+    }
+
+    public function testHasWithDefault()
+    {
+        $request = $this->getRequest([
+            SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([]),
+        ]);
+
+        $session = new Session();
+
+        self::assertFalse($session->has($request, 'some.existing.key'));
+    }
+
     public function testGetWithValue()
     {
         $expectedValue = ['key' => 'value'];
@@ -37,30 +61,6 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
         $session = new Session();
 
         self::assertNull($session->get($request, 'some.existing.key'));
-    }
-
-    public function testHasWithValue()
-    {
-        $request = $this->getRequest([
-            SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([
-                'some.existing.key' => json_encode(['key' => 'value']),
-            ]),
-        ]);
-
-        $session = new Session();
-
-        self::assertTrue($session->has($request, 'some.existing.key'));
-    }
-
-    public function testHasWithDefault()
-    {
-        $request = $this->getRequest([
-            SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([]),
-        ]);
-
-        $session = new Session();
-
-        self::assertFalse($session->has($request, 'some.existing.key'));
     }
 
     public function testSet()

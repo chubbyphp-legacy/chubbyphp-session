@@ -12,17 +12,17 @@ interface SessionInterface
      * @param Request $request
      * @param string  $key
      *
-     * @return mixed
+     * @return bool
      */
-    public function get(Request $request, string $key);
+    public function has(Request $request, string $key): bool;
 
     /**
      * @param Request $request
      * @param string  $key
      *
-     * @return bool
+     * @return mixed
      */
-    public function has(Request $request, string $key): bool;
+    public function get(Request $request, string $key);
 
     /**
      * @param Request $request
