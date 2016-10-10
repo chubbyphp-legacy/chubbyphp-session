@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chubbyphp\Session;
 
 use Psr\Http\Message\ServerRequestInterface as Request;

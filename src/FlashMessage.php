@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chubbyphp\Session;
 
 final class FlashMessage implements \JsonSerializable

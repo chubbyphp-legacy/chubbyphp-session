@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chubbyphp\Session;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -27,7 +29,7 @@ final class Session implements SessionInterface
      */
     public function get(Request $request, string $key)
     {
-        return json_decode($this->getSession($request)->get($key), true);
+        return json_decode((string) $this->getSession($request)->get($key), true);
     }
 
     /**
