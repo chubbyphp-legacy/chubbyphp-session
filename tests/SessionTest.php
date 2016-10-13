@@ -71,11 +71,8 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
 
         self::assertCount(1, $logger->__logs);
         self::assertSame('info', $logger->__logs[0]['level']);
-        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[0]['message']);
-        self::assertSame(
-            ['key' => 'some.existing.key', 'jsonValue' => '{"key":"value"}'],
-            $logger->__logs[0]['context']
-        );
+        self::assertSame('session: get key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'exists' => true], $logger->__logs[0]['context']);
     }
 
     public function testGetWithDefault()
@@ -92,8 +89,8 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
 
         self::assertCount(1, $logger->__logs);
         self::assertSame('info', $logger->__logs[0]['level']);
-        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[0]['message']);
-        self::assertSame(['key' => 'some.notexisting.key', 'jsonValue' => null], $logger->__logs[0]['context']);
+        self::assertSame('session: get key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.notexisting.key', 'exists' => false], $logger->__logs[0]['context']);
     }
 
     public function testSet()
@@ -116,20 +113,14 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
 
         self::assertCount(3, $logger->__logs);
         self::assertSame('info', $logger->__logs[0]['level']);
-        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[0]['message']);
-        self::assertSame(['key' => 'some.existing.key', 'jsonValue' => null], $logger->__logs[0]['context']);
+        self::assertSame('session: get key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'exists' => false], $logger->__logs[0]['context']);
         self::assertSame('info', $logger->__logs[1]['level']);
-        self::assertSame('session: set key {key}, json value {jsonValue}', $logger->__logs[1]['message']);
-        self::assertSame(
-            ['key' => 'some.existing.key', 'jsonValue' => '{"key":"value"}'],
-            $logger->__logs[1]['context']
-        );
+        self::assertSame('session: set key {key}', $logger->__logs[1]['message']);
+        self::assertSame(['key' => 'some.existing.key'], $logger->__logs[1]['context']);
         self::assertSame('info', $logger->__logs[2]['level']);
-        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[2]['message']);
-        self::assertSame(
-            ['key' => 'some.existing.key', 'jsonValue' => '{"key":"value"}'],
-            $logger->__logs[2]['context']
-        );
+        self::assertSame('session: get key {key}, exists {exists}', $logger->__logs[2]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'exists' => true], $logger->__logs[2]['context']);
     }
 
     public function testRemove()
@@ -185,11 +176,8 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
         self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
         self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => false], $logger->__logs[0]['context']);
         self::assertSame('info', $logger->__logs[1]['level']);
-        self::assertSame('session: set key {key}, json value {jsonValue}', $logger->__logs[1]['message']);
-        self::assertSame(
-            ['key' => SessionInterface::FLASH_KEY, 'jsonValue' => json_encode($flashMessage)],
-            $logger->__logs[1]['context']
-        );
+        self::assertSame('session: set key {key}', $logger->__logs[1]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY], $logger->__logs[1]['context']);
         self::assertSame('info', $logger->__logs[2]['level']);
         self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[2]['message']);
         self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => true], $logger->__logs[2]['context']);
@@ -225,16 +213,11 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
         self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[1]['message']);
         self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => true], $logger->__logs[1]['context']);
         self::assertSame('info', $logger->__logs[2]['level']);
-        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[2]['message']);
-        self::assertSame(
-            ['key' => SessionInterface::FLASH_KEY, 'jsonValue' => json_encode($expectedFlashMessage)],
-            $logger->__logs[2]['context']
-        );
-
+        self::assertSame('session: get key {key}, exists {exists}', $logger->__logs[2]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => true], $logger->__logs[2]['context']);
         self::assertSame('info', $logger->__logs[3]['level']);
         self::assertSame('session: remove key {key}', $logger->__logs[3]['message']);
         self::assertSame(['key' => SessionInterface::FLASH_KEY], $logger->__logs[3]['context']);
-
         self::assertSame('info', $logger->__logs[4]['level']);
         self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[4]['message']);
         self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => false], $logger->__logs[4]['context']);

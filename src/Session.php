@@ -48,14 +48,11 @@ final class Session implements SessionInterface
      */
     public function get(Request $request, string $key)
     {
-        $jsonValue = $this->getSession($request)->get($key);
+        $value = json_decode((string) $this->getSession($request)->get($key), true);
 
-        $this->logger->info(
-            'session: get key {key}, json value {jsonValue}',
-            ['key' => $key, 'jsonValue' => $jsonValue]
-        );
+        $this->logger->info('session: get key {key}, exists {exists}', ['key' => $key, 'exists' => (bool) $value]);
 
-        return json_decode((string) $jsonValue, true);
+        return $value;
     }
 
     /**
@@ -65,14 +62,9 @@ final class Session implements SessionInterface
      */
     public function set(Request $request, string $key, $value)
     {
-        $jsonValue = json_encode($value);
+        $this->logger->info('session: set key {key}', ['key' => $key]);
 
-        $this->logger->info(
-            'session: set key {key}, json value {jsonValue}',
-            ['key' => $key, 'jsonValue' => $jsonValue]
-        );
-
-        $this->getSession($request)->set($key, $jsonValue);
+        $this->getSession($request)->set($key, json_encode($value));
     }
 
     /**
