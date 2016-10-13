@@ -4,7 +4,9 @@ namespace Chubbyphp\Tests\Translation;
 
 use Chubbyphp\Session\FlashMessage;
 use Chubbyphp\Session\Session;
+use Chubbyphp\Session\SessionInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use PSR7Session\Http\SessionMiddleware;
 use PSR7Session\Session\SessionInterface as PSR7Session;
 
@@ -21,9 +23,16 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             ]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertTrue($session->has($request, 'some.existing.key'));
+
+        self::assertCount(1, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'exists' => true], $logger->__logs[0]['context']);
     }
 
     public function testHasWithDefault()
@@ -32,9 +41,16 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
 
-        self::assertFalse($session->has($request, 'some.existing.key'));
+        $session = new Session($logger);
+
+        self::assertFalse($session->has($request, 'some.notexisting.key'));
+
+        self::assertCount(1, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.notexisting.key', 'exists' => false], $logger->__logs[0]['context']);
     }
 
     public function testGetWithValue()
@@ -47,9 +63,19 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             ]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertSame($expectedValue, $session->get($request, 'some.existing.key'));
+
+        self::assertCount(1, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[0]['message']);
+        self::assertSame(
+            ['key' => 'some.existing.key', 'jsonValue' => '{"key":"value"}'],
+            $logger->__logs[0]['context']
+        );
     }
 
     public function testGetWithDefault()
@@ -58,9 +84,16 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
 
-        self::assertNull($session->get($request, 'some.existing.key'));
+        $session = new Session($logger);
+
+        self::assertNull($session->get($request, 'some.notexisting.key'));
+
+        self::assertCount(1, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.notexisting.key', 'jsonValue' => null], $logger->__logs[0]['context']);
     }
 
     public function testSet()
@@ -71,13 +104,32 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertSame(null, $session->get($request, 'some.existing.key'));
 
         $session->set($request, 'some.existing.key', $expectedValue);
 
         self::assertSame($expectedValue, $session->get($request, 'some.existing.key'));
+
+        self::assertCount(3, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'jsonValue' => null], $logger->__logs[0]['context']);
+        self::assertSame('info', $logger->__logs[1]['level']);
+        self::assertSame('session: set key {key}, json value {jsonValue}', $logger->__logs[1]['message']);
+        self::assertSame(
+            ['key' => 'some.existing.key', 'jsonValue' => '{"key":"value"}'],
+            $logger->__logs[1]['context']
+        );
+        self::assertSame('info', $logger->__logs[2]['level']);
+        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[2]['message']);
+        self::assertSame(
+            ['key' => 'some.existing.key', 'jsonValue' => '{"key":"value"}'],
+            $logger->__logs[2]['context']
+        );
     }
 
     public function testRemove()
@@ -88,13 +140,26 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             ]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertTrue($session->has($request, 'some.existing.key'));
 
         $session->remove($request, 'some.existing.key');
 
         self::assertFalse($session->has($request, 'some.existing.key'));
+
+        self::assertCount(3, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'exists' => true], $logger->__logs[0]['context']);
+        self::assertSame('info', $logger->__logs[1]['level']);
+        self::assertSame('session: remove key {key}', $logger->__logs[1]['message']);
+        self::assertSame(['key' => 'some.existing.key'], $logger->__logs[1]['context']);
+        self::assertSame('info', $logger->__logs[2]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[2]['message']);
+        self::assertSame(['key' => 'some.existing.key', 'exists' => false], $logger->__logs[2]['context']);
     }
 
     public function testAddFlash()
@@ -105,21 +170,34 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
 
         $flashMessage = new FlashMessage(FlashMessage::TYPE_SUCCESS, 'Worked like a charm');
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertFalse($session->has($request, Session::FLASH_KEY));
 
         $session->addFlash($request, $flashMessage);
 
         self::assertTrue($session->has($request, Session::FLASH_KEY));
+
+        self::assertCount(3, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => false], $logger->__logs[0]['context']);
+        self::assertSame('info', $logger->__logs[1]['level']);
+        self::assertSame('session: set key {key}, json value {jsonValue}', $logger->__logs[1]['message']);
+        self::assertSame(
+            ['key' => SessionInterface::FLASH_KEY, 'jsonValue' => json_encode($flashMessage)],
+            $logger->__logs[1]['context']
+        );
+        self::assertSame('info', $logger->__logs[2]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[2]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => true], $logger->__logs[2]['context']);
     }
 
     public function testGetFlash()
     {
-        $expectedFlashMessage = [
-            FlashMessage::JSON_KEY_TYPE => FlashMessage::TYPE_SUCCESS,
-            FlashMessage::JSON_KEY_MESSAGE => 'Worked like a charm',
-        ];
+        $expectedFlashMessage = new FlashMessage(FlashMessage::TYPE_SUCCESS, 'Worked like a charm');
 
         $request = $this->getRequest([
             SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([
@@ -127,15 +205,39 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             ]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertTrue($session->has($request, Session::FLASH_KEY));
 
         $flashMessage = $session->getFlash($request);
 
-        self::assertSame($expectedFlashMessage, $flashMessage->jsonSerialize());
+        self::assertSame($expectedFlashMessage->jsonSerialize(), $flashMessage->jsonSerialize());
 
         self::assertFalse($session->has($request, Session::FLASH_KEY));
+
+        self::assertCount(5, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => true], $logger->__logs[0]['context']);
+        self::assertSame('info', $logger->__logs[1]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[1]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => true], $logger->__logs[1]['context']);
+        self::assertSame('info', $logger->__logs[2]['level']);
+        self::assertSame('session: get key {key}, json value {jsonValue}', $logger->__logs[2]['message']);
+        self::assertSame(
+            ['key' => SessionInterface::FLASH_KEY, 'jsonValue' => json_encode($expectedFlashMessage)],
+            $logger->__logs[2]['context']
+        );
+
+        self::assertSame('info', $logger->__logs[3]['level']);
+        self::assertSame('session: remove key {key}', $logger->__logs[3]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY], $logger->__logs[3]['context']);
+
+        self::assertSame('info', $logger->__logs[4]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[4]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => false], $logger->__logs[4]['context']);
     }
 
     public function testGetNullFlash()
@@ -144,9 +246,16 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
             SessionMiddleware::SESSION_ATTRIBUTE => $this->getPSR7Session([]),
         ]);
 
-        $session = new Session();
+        $logger = $this->getLogger();
+
+        $session = new Session($logger);
 
         self::assertNull($session->getFlash($request));
+
+        self::assertCount(1, $logger->__logs);
+        self::assertSame('info', $logger->__logs[0]['level']);
+        self::assertSame('session: has key {key}, exists {exists}', $logger->__logs[0]['message']);
+        self::assertSame(['key' => SessionInterface::FLASH_KEY, 'exists' => false], $logger->__logs[0]['context']);
     }
 
     /**
@@ -229,5 +338,55 @@ final class SessionTest extends \PHPUnit_Framework_TestCase
         ;
 
         return $psr7Session;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    private function getLogger(): LoggerInterface
+    {
+        $methods = [
+            'emergency',
+            'alert',
+            'critical',
+            'error',
+            'warning',
+            'notice',
+            'info',
+            'debug',
+        ];
+
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
+        $logger = $this
+            ->getMockBuilder(LoggerInterface::class)
+            ->setMethods(array_merge($methods, ['log']))
+            ->getMockForAbstractClass()
+        ;
+
+        $logger->__logs = [];
+
+        foreach ($methods as $method) {
+            $logger
+                ->expects(self::any())
+                ->method($method)
+                ->willReturnCallback(
+                    function (string $message, array $context = []) use ($logger, $method) {
+                        $logger->log($method, $message, $context);
+                    }
+                )
+            ;
+        }
+
+        $logger
+            ->expects(self::any())
+            ->method('log')
+            ->willReturnCallback(
+                function (string $level, string $message, array $context = []) use ($logger) {
+                    $logger->__logs[] = ['level' => $level, 'message' => $message, 'context' => $context];
+                }
+            )
+        ;
+
+        return $logger;
     }
 }

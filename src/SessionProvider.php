@@ -23,8 +23,8 @@ final class SessionProvider implements ServiceProviderInterface
         $this->registerSetCookie($container);
         $this->registerMiddleware($container);
 
-        $container['session'] = function () {
-            return new Session();
+        $container['session'] = function () use ($container) {
+            return new Session($container['logger'] ?? null);
         };
     }
 
@@ -52,7 +52,7 @@ final class SessionProvider implements ServiceProviderInterface
                 ->withHttpOnly($container['session.setCookieHttpOnly'])
                 ->withPath($container['session.setCookiePath'])
                 ->withSecure($container['session.setCookieSecureOnly'])
-                ;
+            ;
         };
     }
 
