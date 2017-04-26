@@ -4,6 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-session/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-session/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/?branch=master)
 
 ## Description
 
@@ -22,11 +23,15 @@ A simple session solution, based on the [PSR7Session][2] (client side session).
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-session][1].
 
+```sh
+composer require chubbyphp/chubbyphp-session "~1.0"
+```
+
 ## Usage
 
 ### Session
 
-```{.php}
+```php
 <?php
 
 use Chubbyphp\Session\FlashMessage;
@@ -56,7 +61,7 @@ $flashMessage = $session->getFlash($request); // removes the flash from session
 
 ### SessionMiddleware
 
-```{.php}
+```php
 <?php
 
 $app = ...
@@ -67,7 +72,7 @@ $app->add($container['session.middleware']);
 
 ### SessionProvider (Pimple)
 
-```{.php}
+```php
 <?php
 
 use Chubbyphp\Session\Session;
