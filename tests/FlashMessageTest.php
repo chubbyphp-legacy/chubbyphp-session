@@ -5,7 +5,7 @@ namespace Chubbyphp\Tests\Translation;
 use Chubbyphp\Session\FlashMessage;
 
 /**
- * @covers Chubbyphp\Session\FlashMessage
+ * @covers \Chubbyphp\Session\FlashMessage
  */
 final class FlashMessageTest extends \PHPUnit_Framework_TestCase
 {

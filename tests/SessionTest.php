@@ -11,7 +11,7 @@ use PSR7Session\Http\SessionMiddleware;
 use PSR7Session\Session\SessionInterface as PSR7Session;
 
 /**
- * @covers Chubbyphp\Session\Session
+ * @covers \Chubbyphp\Session\Session
  */
 final class SessionTest extends \PHPUnit_Framework_TestCase
 {

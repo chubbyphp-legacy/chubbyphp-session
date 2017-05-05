@@ -9,7 +9,7 @@ use Pimple\Container;
 use PSR7Session\Http\SessionMiddleware;
 
 /**
- * @covers Chubbyphp\Session\SessionProvider
+ * @covers \Chubbyphp\Session\SessionProvider
  */
 final class SessionProviderTest extends \PHPUnit_Framework_TestCase
 {
