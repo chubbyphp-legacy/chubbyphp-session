@@ -5,6 +5,7 @@ namespace Chubbyphp\Tests\Translation;
 use Chubbyphp\Session\FlashMessage;
 use Chubbyphp\Session\Session;
 use Chubbyphp\Session\SessionInterface;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use PSR7Session\Http\SessionMiddleware;
@@ -13,7 +14,7 @@ use PSR7Session\Session\SessionInterface as PSR7Session;
 /**
  * @covers \Chubbyphp\Session\Session
  */
-final class SessionTest extends \PHPUnit_Framework_TestCase
+final class SessionTest extends TestCase
 {
     public function testHasWithValue()
     {

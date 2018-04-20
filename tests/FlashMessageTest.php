@@ -3,11 +3,12 @@
 namespace Chubbyphp\Tests\Translation;
 
 use Chubbyphp\Session\FlashMessage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Session\FlashMessage
  */
-final class FlashMessageTest extends \PHPUnit_Framework_TestCase
+final class FlashMessageTest extends TestCase
 {
     /**
      * @dataProvider getMessagesProvider

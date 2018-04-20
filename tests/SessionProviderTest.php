@@ -5,13 +5,14 @@ namespace Chubbyphp\Tests\Session;
 use Chubbyphp\Session\Session;
 use Chubbyphp\Session\SessionProvider;
 use Dflydev\FigCookies\SetCookie;
+use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use PSR7Session\Http\SessionMiddleware;
 
 /**
  * @covers \Chubbyphp\Session\SessionProvider
  */
-final class SessionProviderTest extends \PHPUnit_Framework_TestCase
+final class SessionProviderTest extends TestCase
 {
     public function testRegister()
     {
