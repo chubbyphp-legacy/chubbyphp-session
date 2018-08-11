@@ -7,8 +7,8 @@ namespace Chubbyphp\Session;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use PSR7Session\Http\SessionMiddleware;
-use PSR7Session\Session\SessionInterface as PSR7Session;
+use PSR7Sessions\Storageless\Http\SessionMiddleware;
+use PSR7Sessions\Storageless\Session\SessionInterface as PSR7Session;
 
 final class Session implements SessionInterface
 {

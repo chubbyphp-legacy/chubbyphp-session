@@ -9,8 +9,8 @@ use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use PSR7Session\Http\SessionMiddleware;
-use PSR7Session\Time\SystemCurrentTime;
+use PSR7Sessions\Storageless\Http\SessionMiddleware;
+use PSR7Sessions\Storageless\Time\SystemCurrentTime;
 
 final class SessionProvider implements ServiceProviderInterface
 {

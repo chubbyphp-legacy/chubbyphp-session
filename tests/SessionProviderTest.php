@@ -7,7 +7,7 @@ use Chubbyphp\Session\SessionProvider;
 use Dflydev\FigCookies\SetCookie;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
-use PSR7Session\Http\SessionMiddleware;
+use PSR7Sessions\Storageless\Http\SessionMiddleware;
 
 /**
  * @covers \Chubbyphp\Session\SessionProvider

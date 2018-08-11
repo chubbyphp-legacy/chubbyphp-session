@@ -1,10 +1,12 @@
 # chubbyphp-session
 
 [![Build Status](https://api.travis-ci.org/chubbyphp/chubbyphp-session.png?branch=master)](https://travis-ci.org/chubbyphp/chubbyphp-session)
-[![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-session/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
-[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-session/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-session/?branch=master)
+[![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-session/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
+[![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-session/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
+[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-session/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
+[![Latest Unstable Version](https://poser.pugx.org/chubbyphp/chubbyphp-session/v/unstable)](https://packagist.org/packages/chubbyphp/chubbyphp-session)
 
 ## Description
 
@@ -13,7 +15,7 @@ A simple session solution, based on the [PSR7Session][2] (client side session).
 ## Requirements
 
  * php: ~7.0
- * psr7-sessions/storageless: ~2.0
+ * psr7-sessions/storageless: ~3.0
 
 ## Suggest
 
@@ -24,7 +26,7 @@ A simple session solution, based on the [PSR7Session][2] (client side session).
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-session][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-session "~1.0"
+composer require chubbyphp/chubbyphp-session "~1.1"
 ```
 
 ## Usage

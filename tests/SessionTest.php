@@ -8,8 +8,8 @@ use Chubbyphp\Session\SessionInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
-use PSR7Session\Http\SessionMiddleware;
-use PSR7Session\Session\SessionInterface as PSR7Session;
+use PSR7Sessions\Storageless\Http\SessionMiddleware;
+use PSR7Sessions\Storageless\Session\SessionInterface as PSR7Session;
 
 /**
  * @covers \Chubbyphp\Session\Session
